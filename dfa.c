@@ -1,10 +1,42 @@
 #include<stdio.h>
+#include<string.h>
+
+int n, m, f, fStates[10], transition[10][10];
+char symbols[10];
+
+int simulateDFA(char input[])
+{
+	int currState = 0, k = 0;
+	while(input[k] != '\0') {
+		//Checking for invalid symbols
+		int index = -1;
+		for(int i = 0; i < m; ++i)
+			if(input[k] == symbols[i]) {
+				index = i;
+				break;
+			}
+		if(index == -1) {
+			printf("\nString contains invalid symbol(s)\n");
+			return 0; //Exit if input is invalid
+		}
+		
+		currState = transition[currState][index];
+		k++;
+	}
+	
+	//Checking if it reached final state
+	int accept = 0;
+	for(int i = 0; i < f; ++i)
+		if(currState == fStates[i]) {
+			accept = 1;
+			break;
+		}
+		
+	return accept;
+}
 
 void main()
 {
-	int n, m, f, fStates[10], transition[10][10];
-	char symbols[10], string[10];
-	
 	printf("Enter number of states: ");
 	scanf("%d", &n);
 	
@@ -25,39 +57,20 @@ void main()
 			printf("From q%d for %c : ", i, symbols[j]);
 			scanf("%d", &transition[i][j]);
 		}
-		
-	printf("\nEnter input string: ");
-	scanf("%s", string);
 	
-	//Simulate DFA
-	int currState = 0, k = 0;
-	while(string[k] != '\0') {
-		//Checking for invalid symbols
-		int index = -1;
-		for(int i = 0; i < m; ++i)
-			if(string[k] == symbols[i]) {
-				index = i;
-				break;
-			}
-		if(index == -1) {
-			printf("\nString contains invalid symbol(s)\n");
-			return; //Exit from program if input is invalid
-		}
+	while(1) {
+		char string[10];
+		printf("\nEnter input string or 'exit' for exiting: ");
+		scanf("%s", string);
 		
-		currState = transition[currState][index];
-		k++;
-	}
-	
-	//Checking if it reached final state
-	int accept = 0;
-	for(int i = 0; i < f; ++i)
-		if(currState == fStates[i]) {
-			accept = 1;
+		if((strcmp(string, "exit")) == 0)
 			break;
-		}
+			
+		int accept = simulateDFA(string);
 		
-	if(accept)
-		printf("\nString is accepted\n");
-	else
-		printf("\n String is rejected\n");
+		if(accept)
+			printf("\nString is accepted\n");
+		else
+			printf("\n String is rejected\n");
+	}
 }
