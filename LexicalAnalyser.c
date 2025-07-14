@@ -11,7 +11,7 @@ void main(int argc, char* argv[])
 	}
 	
 	char ch, ch1, lexeme[25];
-	char keywords[17][10] = {"int", "float", "double", "char", "void", "main", "if", "else", "for", "while", "do", "printf", "scanf", "stdio.h", "string.h", "stdlib.h", "conio.h"};
+	char keywords[18][10] = {"int", "float", "double", "char", "void", "main", "if", "else", "for", "while", "do", "printf", "scanf", "stdio.h", "string.h", "stdlib.h", "conio.h", "include"};
 	int line = 1, slno = 1;
 	
 	FILE *fp1, *fp2;
@@ -46,7 +46,7 @@ void main(int argc, char* argv[])
 			slno++;
 		}
 		
-		else if(ch == '&'||ch == ':'||ch == ',') {
+		else if(ch == '&'||ch == ':'||ch == ','||ch == '#') {
 			printf("%d\t%c\tSpecial_char\t\t%d\n", slno, ch, line);
 			slno++;
 		}
@@ -76,7 +76,7 @@ void main(int argc, char* argv[])
 			lexeme[i++] = ch;
 			ch1 = fgetc(fp1);
 			
-			while(isdigit(ch1)||ch == '.') {
+			while(isdigit(ch1)||ch1 == '.') {
 				lexeme[i++] = ch1;
 				if(ch1 == '.')
 					flag = 1;
@@ -99,7 +99,7 @@ void main(int argc, char* argv[])
 			lexeme[i++] = ch;
 			ch1 = fgetc(fp1);
 			
-			while(isalpha(ch1)||ch == '.'||ch == '_'||isdigit(ch)) {
+			while(isalpha(ch1)||ch1 == '.'||ch1 == '_'||isdigit(ch1)) {
 				lexeme[i++] = ch1;
 				ch1 = fgetc(fp1);
 			}
@@ -107,7 +107,7 @@ void main(int argc, char* argv[])
 			lexeme[i] == '\0';
 			ungetc(ch1, fp1);
 			
-			for(int j = 0; j < 17; j++)
+			for(int j = 0; j < 18; j++)
 				if(strcmp(keywords[j], lexeme) == 0) {
 					flag = 1;
 					break;
